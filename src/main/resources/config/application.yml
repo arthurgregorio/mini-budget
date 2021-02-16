@@ -1,0 +1,46 @@
+spring:
+  application.name: @project.name@
+  jmx.enabled: false
+
+  jackson:
+    default-property-inclusion: non_null
+
+server:
+  servlet:
+    encoding:
+      enabled: true
+      force: true
+      charset: UTF-8
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: ['logfile', 'health', 'info', 'scheduledtasks']
+  endpoint:
+    health:
+      enabled: true
+    info:
+      enabled: true
+    scheduledtasks:
+      enabled: true
+    logfile:
+      enabled: true
+      external-file: /${user.home}/${spring.application.name}/${spring.application.name}.log
+
+logging:
+  file:
+    name: /${user.home}/${spring.application.name}/${spring.application.name}.log
+  level:
+    root: INFO
+    org.hibernate: INFO
+    org.springframework: INFO
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.springframework.context.support: INFO
+
+info:
+  name: ${spring.application.name}
+  description: @project.description@
+  version: @project.version@

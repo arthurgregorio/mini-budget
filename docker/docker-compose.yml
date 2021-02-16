@@ -1,0 +1,37 @@
+version: "3"
+
+services:
+  postgres:
+    container_name: minibudget_postgres
+    image: "postgres:13-alpine"
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=minibudget
+      - POSTGRES_USER=sa_minibudget
+      - POSTGRES_PASSWORD=sa_minibudget
+    command: ["postgres", "-c", "log_statement=all", "-c", "log_destination=stderr"]
+    networks:
+      minibudget_network:
+        aliases:
+          - postgres
+
+  pgadmin4:
+    container_name: minibudget_pgadmin4
+    image: "dpage/pgadmin4"
+    ports:
+      - "6060:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=minibudget@localhost
+      - PGADMIN_DEFAULT_PASSWORD=minibudget
+      - GUNICORN_ACCESS_LOGFILE=/tmp/access-log.log
+    depends_on:
+      - postgres
+    networks:
+      minibudget_network:
+        aliases:
+          - pgadmin4
+
+networks:
+  minibudget_network:
+    driver: bridge
