@@ -45,7 +45,7 @@ public class ContactController {
     }
 
     @GetMapping("/{externalId}")
-    public ResponseEntity<ContactPayload> getById(@PathVariable UUID externalId) {
+    public ResponseEntity<ContactPayload> getByExternalId(@PathVariable UUID externalId) {
         return this.contactRepository.findByExternalId(externalId)
                 .map(contact -> this.conversionService.convert(contact, ContactPayload.class))
                 .map(ResponseEntity::ok)

@@ -15,4 +15,15 @@
                 VALUES('6ce09b57-1fc6-4dcf-84d0-c923c7ed1a1c', 0, current_timestamp, 'Client #3', 'client_three@email.com', '+55 45 1212-5677');
         </sql>
     </changeSet>
+
+    <changeSet id="populate-classifications" author="arthur.gregorio" dbms="h2" context="test">
+        <sql>
+            INSERT INTO classifications(external_id, version, created_on, name, type)
+                VALUES('df9b84b3-5857-4cf9-be19-0936f7e5219c', 0, current_timestamp, 'Food', 'EXPENSE');
+            INSERT INTO classifications(external_id, version, created_on, name, type)
+                VALUES('8c7dd89c-1717-42ae-b9a0-89f3f690b07d', 0, current_timestamp, 'Credit Card', 'EXPENSE');
+            INSERT INTO classifications(external_id, version, created_on, name, type)
+                VALUES('6ce09b57-1fc6-4dcf-84d0-c923c7ed1a1c', 0, current_timestamp, 'Freelancers', 'INCOME');
+        </sql>
+    </changeSet>
 </databaseChangeLog>

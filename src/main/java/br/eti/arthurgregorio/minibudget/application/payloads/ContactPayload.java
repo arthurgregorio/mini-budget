@@ -16,7 +16,7 @@ public class ContactPayload {
     @Getter
     private final UUID externalId;
     @Getter
-    @NotBlank(message = "contact.email.is-blank")
+    @NotBlank(message = "contact.name.is-blank")
     private final String name;
     @Getter
     @NotBlank(message = "contact.email.is-blank")

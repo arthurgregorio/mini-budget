@@ -31,4 +31,30 @@
         </createTable>
         <addUniqueConstraint columnNames="id,external_id" tableName="contacts"/>
     </changeSet>
+
+    <changeSet id="create-classifications" author="arthur.gregorio">
+        <createTable tableName="classifications">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="external_id" type="${uuid_type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="smallint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_update" type="timestamp"/>
+
+            <column name="name" type="varchar(150)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(7)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint columnNames="id,external_id" tableName="classifications"/>
+    </changeSet>
 </databaseChangeLog>

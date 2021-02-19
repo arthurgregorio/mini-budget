@@ -12,11 +12,11 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@ToString
 @MappedSuperclass
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"id", "externalId"})
 @EntityListeners(AuditingEntityListener.class)
+@ToString(of = {"id", "externalId", "version"})
 public abstract class PersistentEntity implements IPersistentEntity<Long> {
 
     @Id

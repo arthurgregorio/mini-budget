@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class ContactPayloadToContactConverter implements Converter<ContactPayload, Contact> {
 
     @Override
-    public Contact convert(ContactPayload subjectPayload) {
-        return ContactMapper.INSTANCE.toModel(subjectPayload);
+    public Contact convert(ContactPayload payload) {
+        return ContactMapper.INSTANCE.toModel(payload);
     }
 }

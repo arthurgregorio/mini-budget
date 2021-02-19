@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@ToString
+@ToString(callSuper = true)
 @Table(name = "contacts")
 @EqualsAndHashCode(callSuper = true)
 public class Contact extends PersistentEntity {
