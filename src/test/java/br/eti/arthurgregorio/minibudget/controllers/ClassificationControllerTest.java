@@ -115,7 +115,7 @@ public class ClassificationControllerTest extends AbstractControllerTest {
 
         assertThat(classifications)
                 .hasSize(1)
-                .extracting("externalId", "name")
+                .extracting("id", "name")
                 .contains(tuple("6ce09b57-1fc6-4dcf-84d0-c923c7ed1a1c", "Freelancers"));
     }
 

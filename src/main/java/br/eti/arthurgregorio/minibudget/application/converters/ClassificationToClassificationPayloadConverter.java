@@ -11,6 +11,6 @@ public class ClassificationToClassificationPayloadConverter implements Converter
 
     @Override
     public ClassificationPayload convert(Classification object) {
-        return ClassificationMapper.INSTANCE.toPayload(object);
+        return ClassificationMapper.INSTANCE.fromModel(object);
     }
 }

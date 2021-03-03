@@ -11,10 +11,8 @@ import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
 @ToString
-public class ContactPayload {
+public class ContactPayload extends BasePayload {
 
-    @Getter
-    private final UUID externalId;
     @Getter
     @NotBlank(message = "contact.name.is-blank")
     private final String name;
@@ -26,11 +24,11 @@ public class ContactPayload {
     private final String telephone;
 
     @JsonCreator
-    public ContactPayload(@JsonProperty("externalId") final UUID externalId,
+    public ContactPayload(@JsonProperty("id") final UUID id,
                           @JsonProperty("name") final String name,
                           @JsonProperty("email") final String email,
                           @JsonProperty("telephone") final String telephone) {
-        this.externalId = externalId;
+        super(id);
         this.name = name;
         this.email = email;
         this.telephone = telephone;

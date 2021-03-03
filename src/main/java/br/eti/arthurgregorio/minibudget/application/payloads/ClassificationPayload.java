@@ -11,10 +11,8 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @ToString
-public class ClassificationPayload {
+public class ClassificationPayload extends BasePayload {
 
-    @Getter
-    private final UUID externalId;
     @Getter
     @NotBlank(message = "classification.name.is-blank")
     private final String name;
@@ -23,10 +21,10 @@ public class ClassificationPayload {
     private final Classification.Type type;
 
     @JsonCreator
-    public ClassificationPayload(@JsonProperty("externalId") final UUID externalId,
+    public ClassificationPayload(@JsonProperty("id") final UUID id,
                                  @JsonProperty("name") final String name,
                                  @JsonProperty("type") final Classification.Type type) {
-        this.externalId = externalId;
+        super(id);
         this.name = name;
         this.type = type;
     }

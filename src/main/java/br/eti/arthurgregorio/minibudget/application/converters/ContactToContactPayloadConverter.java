@@ -11,6 +11,6 @@ public class ContactToContactPayloadConverter implements Converter<Contact, Cont
 
     @Override
     public ContactPayload convert(Contact object) {
-        return ContactMapper.INSTANCE.toPayload(object);
+        return ContactMapper.INSTANCE.fromModel(object);
     }
 }

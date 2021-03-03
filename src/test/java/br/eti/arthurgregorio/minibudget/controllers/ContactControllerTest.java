@@ -115,7 +115,7 @@ public class ContactControllerTest extends AbstractControllerTest {
 
         assertThat(contacts)
                 .hasSize(1)
-                .extracting("externalId", "name")
+                .extracting("id", "name")
                 .contains(tuple("8c7dd89c-1717-42ae-b9a0-89f3f690b07d", "Client #2"));
     }
 

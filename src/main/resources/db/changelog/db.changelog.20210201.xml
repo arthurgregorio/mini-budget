@@ -57,4 +57,52 @@
         </createTable>
         <addUniqueConstraint columnNames="id,external_id" tableName="classifications"/>
     </changeSet>
+
+    <changeSet id="create-movements" author="arthur.gregorio">
+        <createTable tableName="movements">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="external_id" type="${uuid_type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="smallint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_update" type="timestamp"/>
+
+            <column name="description" type="${text_type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="due_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_date" type="date"/>
+            <column name="value" type="decimal">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state" type="varchar(4)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="id_contact" type="bigint" />
+            <column name="id_classification" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addUniqueConstraint columnNames="id,external_id" tableName="classifications"/>
+
+        <addForeignKeyConstraint
+                baseColumnNames="id_contact" baseTableName="movements"
+                constraintName="fk_contacts_on_movements"
+                referencedTableName="contacts" referencedColumnNames="id"/>
+        <addForeignKeyConstraint
+                baseColumnNames="id_classification" baseTableName="movements"
+                constraintName="fk_classifications_on_movements"
+                referencedTableName="classifications" referencedColumnNames="id"/>
+    </changeSet>
 </databaseChangeLog>

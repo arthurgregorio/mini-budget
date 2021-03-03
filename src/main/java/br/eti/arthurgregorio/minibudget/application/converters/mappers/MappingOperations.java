@@ -1,8 +1,18 @@
 package br.eti.arthurgregorio.minibudget.application.converters.mappers;
 
-public interface MappingOperations<T, V> {
+import br.eti.arthurgregorio.minibudget.application.payloads.BasePayload;
+import br.eti.arthurgregorio.minibudget.model.entities.PersistentEntity;
+import org.mapstruct.*;
 
-    V toPayload(T model);
+@MapperConfig(
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
+public interface MappingOperations {
 
-    T toModel(V payload);
+    @Mapping(source = "externalId", target = "id")
+    BasePayload defaultFromModel(PersistentEntity model);
+
+    @InheritInverseConfiguration
+    @Mapping(source = "id", target = "externalId")
+    PersistentEntity defaultToModel(BasePayload payload);
 }
