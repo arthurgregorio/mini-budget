@@ -1,6 +1,7 @@
 package br.eti.arthurgregorio.minibudget.controllers;
 
 import br.eti.arthurgregorio.minibudget.AbstractControllerTest;
+import br.eti.arthurgregorio.minibudget.application.payloads.ClassificationPayload;
 import br.eti.arthurgregorio.minibudget.model.entities.Classification;
 import br.eti.arthurgregorio.minibudget.model.repositories.ClassificationRepository;
 import org.junit.jupiter.api.Disabled;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 
-import javax.lang.model.type.NullType;
 import java.util.Map;
 import java.util.UUID;
 
@@ -35,22 +35,21 @@ public class ClassificationControllerTest extends AbstractControllerTest {
     void shouldSaveClassification() throws Exception {
 
         final var classification = performPostAndExpectCreated(BASE_URL,
-                resourceAsString(this.newClassificationJson), Classification.class);
+                resourceAsString(this.newClassificationJson), ClassificationPayload.class);
 
         assertThat(classification).isNotNull();
-        assertThat(classification.getExternalId()).isNotNull();
+        assertThat(classification.getId()).isNotNull();
 
-        final var optionalClassification = this.classificationRepository.findByExternalId(classification.getExternalId());
+        final var optionalClassification = this.classificationRepository.findByExternalId(classification.getId());
         assertThat(optionalClassification).isPresent();
 
         final var classificationFromBd = optionalClassification.get();
-        assertThat(classificationFromBd.getExternalId()).isEqualTo(classification.getExternalId());
+        assertThat(classificationFromBd.getExternalId()).isEqualTo(classification.getId());
         assertThat(classificationFromBd.getName()).isEqualTo("Rent");
         assertThat(classificationFromBd.getType()).isEqualTo(Classification.Type.EXPENSE);
     }
 
     @Test
-    @Disabled // FIXME should see how to solve the problem when the is passed as blank and a parse error is thrown
     void shouldFailOnEmptyRequiredFields() throws Exception {
 
         final var payload = resourceAsString(this.newClassificationJson)
@@ -66,12 +65,12 @@ public class ClassificationControllerTest extends AbstractControllerTest {
     void shouldUpdateClassification() throws Exception {
 
         final var classification = performPutAndExpectOk(BASE_URL + "/df9b84b3-5857-4cf9-be19-0936f7e5219c",
-                resourceAsString(this.updateClassificationJson), Classification.class);
+                resourceAsString(this.updateClassificationJson), ClassificationPayload.class);
 
         assertThat(classification).isNotNull();
-        assertThat(classification.getExternalId()).isNotNull();
+        assertThat(classification.getId()).isNotNull();
 
-        final var optionalClassification = this.classificationRepository.findByExternalId(classification.getExternalId());
+        final var optionalClassification = this.classificationRepository.findByExternalId(classification.getId());
         assertThat(optionalClassification).isPresent();
 
         final var classificationFromBd = optionalClassification.get();
@@ -99,10 +98,10 @@ public class ClassificationControllerTest extends AbstractControllerTest {
     void shouldFindAnClassificationByExternalId() throws Exception {
 
         final var classification = performGetAndExpectOk(
-                BASE_URL + "/6ce09b57-1fc6-4dcf-84d0-c923c7ed1a1c", Classification.class);
+                BASE_URL + "/6ce09b57-1fc6-4dcf-84d0-c923c7ed1a1c", ClassificationPayload.class);
 
         assertThat(classification).isNotNull();
-        assertThat(classification.getExternalId().toString()).isEqualTo("6ce09b57-1fc6-4dcf-84d0-c923c7ed1a1c");
+        assertThat(classification.getId().toString()).isEqualTo("6ce09b57-1fc6-4dcf-84d0-c923c7ed1a1c");
         assertThat(classification.getName()).isEqualTo("Freelancers");
         assertThat(classification.getType()).isEqualTo(Classification.Type.INCOME);
     }
@@ -111,7 +110,7 @@ public class ClassificationControllerTest extends AbstractControllerTest {
     void shouldFindClassificationUsingFilters() throws Exception {
 
         final var classifications = performGetPaginated(BASE_URL,
-                Map.of("name", "Freelancers"), Classification.class);
+                Map.of("name", "Freelancers"), ClassificationPayload.class);
 
         assertThat(classifications)
                 .hasSize(1)

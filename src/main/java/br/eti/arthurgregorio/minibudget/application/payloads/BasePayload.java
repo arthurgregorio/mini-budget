@@ -1,6 +1,7 @@
 package br.eti.arthurgregorio.minibudget.application.payloads;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -13,7 +14,7 @@ public class BasePayload {
     private final UUID id;
 
     @JsonCreator
-    public BasePayload(UUID id) {
+    public BasePayload(@JsonProperty("id") final UUID id) {
         this.id = id;
     }
 }
