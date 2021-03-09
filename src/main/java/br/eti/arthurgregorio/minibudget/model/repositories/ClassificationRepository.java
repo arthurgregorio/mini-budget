@@ -12,6 +12,6 @@ import org.springframework.stereotype.Repository;
 public interface ClassificationRepository extends DefaultRepository<Classification> {
 
     @Query("from Classification c " +
-            "where (:#{#filter.name} is null or lower(c.name) like lower(concat('%', :#{#filter.name}, '%')))")
+            "where (:#{#filter.name} is null or c.name like :#{#filter.name})")
     Page<Classification> findByFilter(@Param("filter") ClassificationQueryFilter filter, Pageable pageable);
 }

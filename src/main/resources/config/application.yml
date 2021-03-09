@@ -4,6 +4,8 @@ spring:
 
   jackson:
     default-property-inclusion: non_null
+    deserialization:
+      read_unknown_enum_values_as_null: true
 
 server:
   servlet:
