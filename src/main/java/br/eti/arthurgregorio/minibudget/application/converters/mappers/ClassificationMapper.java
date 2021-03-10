@@ -7,7 +7,7 @@ import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(config = MappingOperations.class)
+@Mapper(config = MapperConfigurations.class)
 public interface ClassificationMapper {
 
     ClassificationMapper INSTANCE = Mappers.getMapper(ClassificationMapper.class);
