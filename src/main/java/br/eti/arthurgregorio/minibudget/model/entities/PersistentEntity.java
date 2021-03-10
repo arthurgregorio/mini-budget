@@ -1,9 +1,6 @@
 package br.eti.arthurgregorio.minibudget.model.entities;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -25,6 +22,7 @@ public abstract class PersistentEntity implements IPersistentEntity<Long> {
     @Column(name = "id", updatable = false, unique = true)
     private Long id;
     @Getter
+    @Setter
     @Column(name = "external_id", length = 36, updatable = false, unique = true)
     private UUID externalId;
     @Getter
