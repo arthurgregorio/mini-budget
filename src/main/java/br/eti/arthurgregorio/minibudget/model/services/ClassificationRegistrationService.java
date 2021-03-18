@@ -16,7 +16,7 @@ public class ClassificationRegistrationService {
     }
 
     @Transactional
-    public Classification create(Classification Classification) {
+    public Classification save(Classification Classification) {
         return this.classificationRepository.save(Classification);
     }
 

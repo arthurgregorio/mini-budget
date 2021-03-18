@@ -11,5 +11,5 @@ public interface ClassificationToClassificationPayloadConverter extends Converte
 
     @Override
     @Mapping(source = "externalId", target = "id")
-    ClassificationPayload convert(Classification object);
+    ClassificationPayload convert(Classification classification);
 }

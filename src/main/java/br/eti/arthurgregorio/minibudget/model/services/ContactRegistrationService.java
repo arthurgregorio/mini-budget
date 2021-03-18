@@ -16,7 +16,7 @@ public class ContactRegistrationService {
     }
 
     @Transactional
-    public Contact create(Contact Contact) {
+    public Contact save(Contact Contact) {
         return this.contactRepository.save(Contact);
     }
 

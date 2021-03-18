@@ -55,14 +55,14 @@ public class ClassificationController {
     @PostMapping
     public ResponseEntity<ClassificationPayload> create(@RequestBody @Valid ClassificationPayload payload) {
 
-        final var classification = this.classificationRegistrationService.create(
+        final var classification = this.classificationRegistrationService.save(
                 this.conversionService.convert(payload, Classification.class));
 
         final var newClassification = this.conversionService.convert(classification, ClassificationPayload.class);
 
         final var location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(classification.getId())
+                .path("/{externalId}")
+                .buildAndExpand(classification.getExternalId())
                 .toUri();
 
         return ResponseEntity.created(location).body(newClassification);

@@ -11,5 +11,5 @@ public interface ContactToContactPayloadConverter extends Converter<Contact, Con
 
     @Override
     @Mapping(source = "externalId", target = "id")
-    ContactPayload convert(Contact object);
+    ContactPayload convert(Contact contact);
 }

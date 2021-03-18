@@ -55,14 +55,14 @@ public class ContactController {
     @PostMapping
     public ResponseEntity<ContactPayload> create(@RequestBody @Valid ContactPayload payload) {
 
-        final var contact = this.contactRegistrationService.create(
+        final var contact = this.contactRegistrationService.save(
                 this.conversionService.convert(payload, Contact.class));
 
         final var newContact = this.conversionService.convert(contact, ContactPayload.class);
 
         final var location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(contact.getId())
+                .path("/{externalId}")
+                .buildAndExpand(contact.getExternalId())
                 .toUri();
 
         return ResponseEntity.created(location).body(newContact);

@@ -53,6 +53,17 @@ public class Movement extends PersistentEntity {
         this.state = State.OPEN;
     }
 
+    public Movement(String description, LocalDate dueDate, LocalDate paymentDate, BigDecimal value, State state,
+                    Contact contact, Classification classification) {
+        this.description = description;
+        this.dueDate = dueDate;
+        this.paymentDate = paymentDate;
+        this.value = value;
+        this.state = state;
+        this.contact = contact;
+        this.classification = classification;
+    }
+
     public void updateValues(MovementPayload movementPayload) {
         this.description = movementPayload.getDescription();
         this.dueDate = movementPayload.getDueDate();
