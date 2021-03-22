@@ -1,11 +1,18 @@
 package br.eti.arthurgregorio.minibudget.application.controllers.advice;
 
+import br.eti.arthurgregorio.minibudget.application.validators.message.ValidationErrorResponse;
 import br.eti.arthurgregorio.minibudget.model.exceptions.BusinessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.io.IOException;
 
 @RestControllerAdvice
@@ -19,10 +26,36 @@ public class ExceptionHandlerAdvice {
         response.sendError(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
     }
 
-    @ExceptionHandler(
-            BusinessException.class
-    )
+    @ExceptionHandler(BusinessException.class)
     void handle(HttpServletResponse response, BusinessException exception) throws IOException {
         response.sendError(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(ConstraintViolationException.class)
+    ValidationErrorResponse handle(ConstraintViolationException exception) {
+
+        final ValidationErrorResponse error = new ValidationErrorResponse();
+
+        for (ConstraintViolation<?> violation : exception.getConstraintViolations()) {
+            error.add(new ValidationErrorResponse.Violation(violation.getPropertyPath().toString(), violation.getMessage()));
+        }
+
+        return error;
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    ValidationErrorResponse handle(MethodArgumentNotValidException exception) {
+
+        final ValidationErrorResponse response = new ValidationErrorResponse();
+
+        for (FieldError fieldError : exception.getBindingResult().getFieldErrors()) {
+            response.add(new ValidationErrorResponse.Violation(fieldError.getField(), fieldError.getDefaultMessage()));
+        }
+
+        return response;
     }
 }

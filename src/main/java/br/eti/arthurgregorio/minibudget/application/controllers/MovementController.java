@@ -1,6 +1,6 @@
 package br.eti.arthurgregorio.minibudget.application.controllers;
 
-import br.eti.arthurgregorio.minibudget.application.payloads.MovementPayload;
+import br.eti.arthurgregorio.minibudget.application.payloads.MovementRegistrationPayload;
 import br.eti.arthurgregorio.minibudget.model.entities.Movement;
 import br.eti.arthurgregorio.minibudget.model.repositories.MovementRepository;
 import br.eti.arthurgregorio.minibudget.model.services.MovementRegistrationService;
@@ -31,20 +31,20 @@ public class MovementController {
     }
 
     @GetMapping("/{externalId}")
-    public ResponseEntity<MovementPayload> getByExternalId(@PathVariable UUID externalId) {
+    public ResponseEntity<MovementRegistrationPayload> getByExternalId(@PathVariable UUID externalId) {
         return this.movementRepository.findByExternalId(externalId)
-                .map(movement -> this.conversionService.convert(movement, MovementPayload.class))
+                .map(movement -> this.conversionService.convert(movement, MovementRegistrationPayload.class))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.noContent().build());
     }
 
     @PostMapping
-    public ResponseEntity<MovementPayload> create(@RequestBody @Valid MovementPayload payload) {
+    public ResponseEntity<MovementRegistrationPayload> create(@RequestBody @Valid MovementRegistrationPayload payload) {
 
         final var movement = this.movementRegistrationService.save(
                 this.conversionService.convert(payload, Movement.class));
 
-        final var newMovement = this.conversionService.convert(movement, MovementPayload.class);
+        final var newMovement = this.conversionService.convert(movement, MovementRegistrationPayload.class);
 
         final var location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{externalId}")

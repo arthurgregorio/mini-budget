@@ -1,6 +1,5 @@
 package br.eti.arthurgregorio.minibudget.model.entities;
 
-import br.eti.arthurgregorio.minibudget.application.payloads.MovementPayload;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -53,21 +52,13 @@ public class Movement extends PersistentEntity {
         this.state = State.OPEN;
     }
 
-    public Movement(String description, LocalDate dueDate, LocalDate paymentDate, BigDecimal value, State state,
-                    Contact contact, Classification classification) {
+    public Movement(String description, LocalDate dueDate, BigDecimal value, Contact contact, Classification classification) {
+        this();
         this.description = description;
         this.dueDate = dueDate;
-        this.paymentDate = paymentDate;
         this.value = value;
-        this.state = state;
         this.contact = contact;
         this.classification = classification;
-    }
-
-    public void updateValues(MovementPayload movementPayload) {
-        this.description = movementPayload.getDescription();
-        this.dueDate = movementPayload.getDueDate();
-        this.value = movementPayload.getValue();
     }
 
     public enum State {
