@@ -100,7 +100,7 @@ public class MovementControllerTest extends AbstractControllerTest {
                 .replace("{classificationId}", "6bd6f187-a67c-4a70-be47-ca6b18489bbc");
 
         performPost(BASE_URL, payload)
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -111,7 +111,7 @@ public class MovementControllerTest extends AbstractControllerTest {
                 .replace("{classificationId}", "74dbfa26-8fdc-4287-ab94-b14420d0276d");
 
         performPost(BASE_URL, payload)
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test

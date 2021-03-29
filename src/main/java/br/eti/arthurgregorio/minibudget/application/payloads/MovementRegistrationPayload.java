@@ -23,7 +23,7 @@ public class MovementRegistrationPayload extends BasePayload {
     private final LocalDate dueDate;
     @Getter
     @NotNull(message = "movement.value.is-null")
-    @Min(value = 0, message = "movement.value.is-less-than-zero")
+    @Min(value = 1, message = "movement.value.is-lt-or-eq-zero")
     private final BigDecimal value;
 
     @Getter

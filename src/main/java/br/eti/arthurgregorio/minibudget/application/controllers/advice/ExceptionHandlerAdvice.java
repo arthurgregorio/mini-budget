@@ -16,6 +16,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.io.IOException;
 
+import static br.eti.arthurgregorio.minibudget.application.validators.message.ValidationErrorResponse.Violation;
+
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
 
@@ -27,9 +29,11 @@ public class ExceptionHandlerAdvice {
         response.sendError(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
     }
 
+    @ResponseBody
     @ExceptionHandler(BusinessException.class)
-    void handle(HttpServletResponse response, BusinessException exception) throws IOException {
-        response.sendError(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    Violation handle(BusinessException exception) throws IOException {
+        return new Violation(exception.getMessage(), exception.getDetail());
     }
 
     // TODO improve the integrity violation handling

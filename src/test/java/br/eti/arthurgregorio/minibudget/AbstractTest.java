@@ -51,14 +51,6 @@ public class AbstractTest {
         }
     }
 
-    protected String toJson(Object value) {
-        try {
-            return this.objectMapper.writeValueAsString(value);
-        } catch (JsonProcessingException ex) {
-            throw new RuntimeException("Failed to convert the given object to JSON", ex);
-        }
-    }
-
     protected String resourceAsString(Resource resource) {
         try {
             return Resources.toString(resource.getURL(), Charsets.UTF_8);
