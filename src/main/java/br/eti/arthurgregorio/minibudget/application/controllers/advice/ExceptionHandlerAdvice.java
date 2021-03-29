@@ -2,6 +2,7 @@ package br.eti.arthurgregorio.minibudget.application.controllers.advice;
 
 import br.eti.arthurgregorio.minibudget.application.validators.message.ValidationErrorResponse;
 import br.eti.arthurgregorio.minibudget.model.exceptions.BusinessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -28,6 +29,12 @@ public class ExceptionHandlerAdvice {
 
     @ExceptionHandler(BusinessException.class)
     void handle(HttpServletResponse response, BusinessException exception) throws IOException {
+        response.sendError(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+    }
+
+    // TODO improve the integrity violation handling
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    void handle(HttpServletResponse response, DataIntegrityViolationException exception) throws IOException {
         response.sendError(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
     }
 

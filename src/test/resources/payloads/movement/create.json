@@ -2,7 +2,6 @@
   "description": "Test movement",
   "dueDate": "2021-10-20",
   "value": 150,
-  "state": "OPEN",
   "contactId": "{contactId}",
   "classificationId": "{classificationId}"
 }

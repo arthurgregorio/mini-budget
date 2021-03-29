@@ -74,7 +74,7 @@ public class ClassificationController {
         final var classification = this.classificationRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new ResourceNotFoundException(externalId));
 
-        classification.updateValues(payload);
+        classification.prepareForUpdate(this.conversionService.convert(payload, Classification.class));
 
         final var updatedPayload = this.conversionService.convert(
                 this.classificationRegistrationService.update(classification), ClassificationPayload.class);

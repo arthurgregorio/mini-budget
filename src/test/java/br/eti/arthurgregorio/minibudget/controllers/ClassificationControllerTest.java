@@ -32,21 +32,21 @@ public class ClassificationControllerTest extends AbstractControllerTest {
     private ClassificationRepository classificationRepository;
 
     @Test
-    void shouldSaveClassification() throws Exception {
+    void shouldSave() throws Exception {
 
-        final var classification = performPostAndExpectCreated(BASE_URL,
+        final var response = performPostAndExpectCreated(BASE_URL,
                 resourceAsString(this.newClassificationJson), ClassificationPayload.class);
 
-        assertThat(classification).isNotNull();
-        assertThat(classification.getId()).isNotNull();
+        assertThat(response).isNotNull();
+        assertThat(response.getId()).isNotNull();
 
-        final var optionalClassification = this.classificationRepository.findByExternalId(classification.getId());
-        assertThat(optionalClassification).isPresent();
+        final var result = this.classificationRepository.findByExternalId(response.getId());
+        assertThat(result).isPresent();
 
-        final var classificationFromBd = optionalClassification.get();
-        assertThat(classificationFromBd.getExternalId()).isEqualTo(classification.getId());
-        assertThat(classificationFromBd.getName()).isEqualTo("Rent");
-        assertThat(classificationFromBd.getType()).isEqualTo(Classification.Type.EXPENSE);
+        final var classification = result.get();
+        assertThat(classification.getExternalId()).isEqualTo(response.getId());
+        assertThat(classification.getName()).isEqualTo("Rent");
+        assertThat(classification.getType()).isEqualTo(Classification.Type.EXPENSE);
     }
 
     @Test
@@ -56,38 +56,37 @@ public class ClassificationControllerTest extends AbstractControllerTest {
                 .replace("Rent", "")
                 .replace("EXPENSE", "");
 
-        performPost(BASE_URL, payload, status().is(422)).andExpect(
-                jsonPath("$.violations[*].property", containsInAnyOrder("name", "type"))
-        );
+        performPost(BASE_URL, payload, status().is(422))
+                .andExpect(jsonPath("$.violations[*].property", containsInAnyOrder("name", "type")));
     }
 
     @Test
-    void shouldUpdateClassification() throws Exception {
+    void shouldUpdate() throws Exception {
 
-        final var classification = performPutAndExpectOk(BASE_URL + "/df9b84b3-5857-4cf9-be19-0936f7e5219c",
+        final var response = performPutAndExpectOk(BASE_URL + "/df9b84b3-5857-4cf9-be19-0936f7e5219c",
                 resourceAsString(this.updateClassificationJson), ClassificationPayload.class);
 
-        assertThat(classification).isNotNull();
-        assertThat(classification.getId()).isNotNull();
+        assertThat(response).isNotNull();
+        assertThat(response.getId()).isNotNull();
 
-        final var optionalClassification = this.classificationRepository.findByExternalId(classification.getId());
-        assertThat(optionalClassification).isPresent();
+        final var result = this.classificationRepository.findByExternalId(response.getId());
+        assertThat(result).isPresent();
 
-        final var classificationFromBd = optionalClassification.get();
-        assertThat(classificationFromBd.getExternalId().toString()).isEqualTo("df9b84b3-5857-4cf9-be19-0936f7e5219c");
-        assertThat(classificationFromBd.getName()).isEqualTo("Selling Things");
-        assertThat(classificationFromBd.getType()).isEqualTo(Classification.Type.INCOME);
+        final var classification = result.get();
+        assertThat(classification.getExternalId().toString()).isEqualTo("df9b84b3-5857-4cf9-be19-0936f7e5219c");
+        assertThat(classification.getName()).isEqualTo("Selling Things");
+        assertThat(classification.getType()).isEqualTo(Classification.Type.INCOME);
     }
 
     @Test
-    void shouldQueryClassificationsWithPagination() throws Exception {
+    void shouldQueryWithPagination() throws Exception {
 
-        final var result = performGet(
+        final var response = performGet(
                 BASE_URL,
                 Map.of("page", "0", "size", "2"),
                 status().isPartialContent());
 
-        result.andExpect(jsonPath("$.totalElements", greaterThanOrEqualTo(3)))
+        response.andExpect(jsonPath("$.totalElements", greaterThanOrEqualTo(3)))
                 .andExpect(jsonPath("$.numberOfElements", is(2)))
                 .andExpect(jsonPath("$.totalPages", greaterThanOrEqualTo(2)))
                 .andExpect(jsonPath("$.size", is(2)))
@@ -95,37 +94,48 @@ public class ClassificationControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void shouldFindAnClassificationByExternalId() throws Exception {
+    void shouldFindByExternalId() throws Exception {
 
-        final var classification = performGetAndExpectOk(
+        final var response = performGetAndExpectOk(
                 BASE_URL + "/6ce09b57-1fc6-4dcf-84d0-c923c7ed1a1c", ClassificationPayload.class);
 
-        assertThat(classification).isNotNull();
-        assertThat(classification.getId().toString()).isEqualTo("6ce09b57-1fc6-4dcf-84d0-c923c7ed1a1c");
-        assertThat(classification.getName()).isEqualTo("Freelancers");
-        assertThat(classification.getType()).isEqualTo(Classification.Type.INCOME);
+        assertThat(response).isNotNull();
+        assertThat(response.getId().toString()).isEqualTo("6ce09b57-1fc6-4dcf-84d0-c923c7ed1a1c");
+        assertThat(response.getName()).isEqualTo("Freelancers");
+        assertThat(response.getType()).isEqualTo(Classification.Type.INCOME);
     }
 
     @Test
-    void shouldFindClassificationUsingFilters() throws Exception {
+    void shouldFindUsingFilters() throws Exception {
 
-        final var classifications = performGetPaginated(BASE_URL,
+        final var response = performGetPaginated(BASE_URL,
                 Map.of("name", "Freelancers"), ClassificationPayload.class);
 
-        assertThat(classifications)
+        assertThat(response)
                 .hasSize(1)
                 .extracting("id", "name")
                 .contains(tuple("6ce09b57-1fc6-4dcf-84d0-c923c7ed1a1c", "Freelancers"));
     }
 
     @Test
-    void shouldDeleteAnClassification() throws Exception {
+    void shouldDelete() throws Exception {
 
         performDeleteAndExpectOk(BASE_URL + "/8c7dd89c-1717-42ae-b9a0-89f3f690b07d");
 
-        final var optionalClassification = this.classificationRepository.findByExternalId(
+        final var result = this.classificationRepository.findByExternalId(
                 UUID.fromString("8c7dd89c-1717-42ae-b9a0-89f3f690b07d"));
 
-        assertThat(optionalClassification).isNotPresent();
+        assertThat(result).isNotPresent();
+    }
+
+    @Test
+    void shouldFailWhenHasLinkWithMovement() throws Exception {
+
+        performDeleteAndExpect(BASE_URL + "/6bd6f187-a67c-4a70-be47-ca6b18489bbc", status().isBadRequest());
+
+        final var result = this.classificationRepository.findByExternalId(
+                UUID.fromString("6bd6f187-a67c-4a70-be47-ca6b18489bbc"));
+
+        assertThat(result).isPresent();
     }
 }

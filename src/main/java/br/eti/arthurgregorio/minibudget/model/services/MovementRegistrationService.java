@@ -19,12 +19,17 @@ public class MovementRegistrationService {
     public Movement save(Movement Movement) {
 
         // TODO prevent saving with paid status
+        // TODO prevent saving with value less than 1
 
         return this.movementRepository.save(Movement);
     }
 
     @Transactional
     public Movement update(Movement Movement) {
+
+        // TODO prevent saving with paid status
+        // TODO prevent saving with value less than 1
+
         return this.movementRepository.save(Movement);
     }
 

@@ -1,6 +1,5 @@
 package br.eti.arthurgregorio.minibudget.model.entities;
 
-import br.eti.arthurgregorio.minibudget.application.payloads.ContactPayload;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,9 +28,9 @@ public class Contact extends PersistentEntity {
     @Column(name = "telephone", length = 20)
     private String telephone;
 
-    public void updateValues(ContactPayload payload) {
-        this.name = payload.getName();
-        this.email = payload.getEmail();
-        this.telephone = payload.getTelephone();
+    public void prepareForUpdate(Contact contact) {
+        this.name = contact.getName();
+        this.email = contact.getEmail();
+        this.telephone = contact.getTelephone();
     }
 }

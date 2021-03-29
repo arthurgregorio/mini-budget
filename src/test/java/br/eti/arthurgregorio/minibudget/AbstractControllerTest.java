@@ -87,6 +87,10 @@ public class AbstractControllerTest extends AbstractTest {
         return resultActions.andReturn();
     }
 
+    protected void performDeleteAndExpect(String urlTemplate, ResultMatcher resultMatcher) throws Exception {
+        this.mockMvc.perform(delete(urlTemplate)).andExpect(resultMatcher);
+    }
+
     protected void performDeleteAndExpectOk(String urlTemplate) throws Exception {
         this.mockMvc.perform(delete(urlTemplate)).andExpect(status().isOk());
     }

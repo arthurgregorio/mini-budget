@@ -1,5 +1,6 @@
 package br.eti.arthurgregorio.minibudget.model.entities;
 
+import br.eti.arthurgregorio.minibudget.application.payloads.MovementRegistrationPayload;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -59,6 +60,16 @@ public class Movement extends PersistentEntity {
         this.value = value;
         this.contact = contact;
         this.classification = classification;
+    }
+
+    public void prepareForUpdate(Movement movement) {
+
+        this.description = movement.getDescription();
+        this.dueDate = movement.getDueDate();
+        this.value = movement.getValue();
+
+        this.contact = movement.getContact();
+        this.classification = movement.getClassification();
     }
 
     public enum State {

@@ -30,22 +30,22 @@ public class ContactControllerTest extends AbstractControllerTest {
     private ContactRepository contactRepository;
 
     @Test
-    void shouldSaveContact() throws Exception {
+    void shouldSave() throws Exception {
 
-        final var contactPayload = performPostAndExpectCreated(BASE_URL,
-                resourceAsString(this.newContactJson), ContactPayload.class);
+        final var response = performPostAndExpectCreated(BASE_URL, resourceAsString(this.newContactJson),
+                ContactPayload.class);
 
-        assertThat(contactPayload).isNotNull();
-        assertThat(contactPayload.getId()).isNotNull();
+        assertThat(response).isNotNull();
+        assertThat(response.getId()).isNotNull();
 
-        final var optionalContact = this.contactRepository.findByExternalId(contactPayload.getId());
-        assertThat(optionalContact).isPresent();
+        final var result = this.contactRepository.findByExternalId(response.getId());
+        assertThat(result).isPresent();
 
-        final var contactFromBd = optionalContact.get();
-        assertThat(contactFromBd.getExternalId()).isEqualTo(contactPayload.getId());
-        assertThat(contactFromBd.getName()).isEqualTo("Client #4");
-        assertThat(contactFromBd.getEmail()).isEqualTo("client_four@email.com");
-        assertThat(contactFromBd.getTelephone()).isNull();
+        final var contact = result.get();
+        assertThat(contact.getExternalId()).isEqualTo(response.getId());
+        assertThat(contact.getName()).isEqualTo("Client #4");
+        assertThat(contact.getEmail()).isEqualTo("client_four@email.com");
+        assertThat(contact.getTelephone()).isNull();
     }
 
     @Test
@@ -55,39 +55,38 @@ public class ContactControllerTest extends AbstractControllerTest {
                 .replace("Client #4", "")
                 .replace("client_four@email.com", "");
 
-        performPost(BASE_URL, payload, status().is(422)).andExpect(
-                jsonPath("$.violations[*].property", containsInAnyOrder("name", "email"))
-        );
+        performPost(BASE_URL, payload, status().is(422))
+                .andExpect(jsonPath("$.violations[*].property", containsInAnyOrder("name", "email")));
     }
 
     @Test
-    void shouldUpdateContact() throws Exception {
+    void shouldUpdate() throws Exception {
 
-        final var contactPayload = performPutAndExpectOk(BASE_URL + "/df9b84b3-5857-4cf9-be19-0936f7e5219c",
+        final var response = performPutAndExpectOk(BASE_URL + "/8c7dd89c-1717-42ae-b9a0-89f3f690b07d",
                 resourceAsString(this.updateContactJson), ContactPayload.class);
 
-        assertThat(contactPayload).isNotNull();
-        assertThat(contactPayload.getId()).isNotNull();
+        assertThat(response).isNotNull();
+        assertThat(response.getId()).isNotNull();
 
-        final var optionalContact = this.contactRepository.findByExternalId(contactPayload.getId());
-        assertThat(optionalContact).isPresent();
+        final var result = this.contactRepository.findByExternalId(response.getId());
+        assertThat(result).isPresent();
 
-        final var contactFromBd = optionalContact.get();
-        assertThat(contactFromBd.getExternalId().toString()).isEqualTo("df9b84b3-5857-4cf9-be19-0936f7e5219c");
-        assertThat(contactFromBd.getName()).isEqualTo("Client #5");
-        assertThat(contactFromBd.getEmail()).isEqualTo("client_five@email.com");
-        assertThat(contactFromBd.getTelephone()).isEqualTo("+55 48 1111-2222");
+        final var contact = result.get();
+        assertThat(contact.getExternalId().toString()).isEqualTo("8c7dd89c-1717-42ae-b9a0-89f3f690b07d");
+        assertThat(contact.getName()).isEqualTo("Client #5");
+        assertThat(contact.getEmail()).isEqualTo("client_five@email.com");
+        assertThat(contact.getTelephone()).isEqualTo("+55 48 1111-2222");
     }
 
     @Test
-    void shouldQueryContactsWithPagination() throws Exception {
+    void shouldQueryWithPagination() throws Exception {
 
-        final var result = performGet(
+        final var response = performGet(
                 BASE_URL,
                 Map.of("page", "0", "size", "2"),
                 status().isPartialContent());
 
-        result.andExpect(jsonPath("$.totalElements", greaterThanOrEqualTo(3)))
+        response.andExpect(jsonPath("$.totalElements", greaterThanOrEqualTo(3)))
                 .andExpect(jsonPath("$.numberOfElements", is(2)))
                 .andExpect(jsonPath("$.totalPages", greaterThanOrEqualTo(2)))
                 .andExpect(jsonPath("$.size", is(2)))
@@ -95,38 +94,49 @@ public class ContactControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void shouldFindAnContactByExternalId() throws Exception {
+    void shouldFindByExternalId() throws Exception {
 
-        final var contactPayload = performGetAndExpectOk(
+        final var response = performGetAndExpectOk(
                 BASE_URL + "/6ce09b57-1fc6-4dcf-84d0-c923c7ed1a1c", ContactPayload.class);
 
-        assertThat(contactPayload).isNotNull();
-        assertThat(contactPayload.getId().toString()).isEqualTo("6ce09b57-1fc6-4dcf-84d0-c923c7ed1a1c");
-        assertThat(contactPayload.getName()).isEqualTo("Client #3");
-        assertThat(contactPayload.getEmail()).isEqualTo("client_three@email.com");
-        assertThat(contactPayload.getTelephone()).isEqualTo("+55 45 1212-5677");
+        assertThat(response).isNotNull();
+        assertThat(response.getId().toString()).isEqualTo("6ce09b57-1fc6-4dcf-84d0-c923c7ed1a1c");
+        assertThat(response.getName()).isEqualTo("Client #3");
+        assertThat(response.getEmail()).isEqualTo("client_three@email.com");
+        assertThat(response.getTelephone()).isEqualTo("+55 45 1212-5677");
     }
 
     @Test
-    void shouldFindContactUsingFilters() throws Exception {
+    void shouldFindUsingFilters() throws Exception {
 
-        final var contacts = performGetPaginated(BASE_URL,
-                Map.of("email", "client_two@email.com"), ContactPayload.class);
+        final var response = performGetPaginated(BASE_URL,
+                Map.of("email", "client_three@email.com"), ContactPayload.class);
 
-        assertThat(contacts)
+        assertThat(response)
                 .hasSize(1)
                 .extracting("id", "name")
-                .contains(tuple("8c7dd89c-1717-42ae-b9a0-89f3f690b07d", "Client #2"));
+                .contains(tuple("6ce09b57-1fc6-4dcf-84d0-c923c7ed1a1c", "Client #3"));
     }
 
     @Test
-    void shouldDeleteAnContact() throws Exception {
+    void shouldDelete() throws Exception {
 
         performDeleteAndExpectOk(BASE_URL + "/df9b84b3-5857-4cf9-be19-0936f7e5219c");
 
-        final var optionalContact = this.contactRepository.findByExternalId(
+        final var result = this.contactRepository.findByExternalId(
                 UUID.fromString("df9b84b3-5857-4cf9-be19-0936f7e5219c"));
 
-        assertThat(optionalContact).isNotPresent();
+        assertThat(result).isNotPresent();
+    }
+
+    @Test
+    void shouldFailWhenHasLinkWithMovement() throws Exception {
+
+        performDeleteAndExpect(BASE_URL + "/607ef966-f6c0-48b7-bbb1-ec2a36191509", status().isBadRequest());
+
+        final var result = this.contactRepository.findByExternalId(
+                UUID.fromString("607ef966-f6c0-48b7-bbb1-ec2a36191509"));
+
+        assertThat(result).isPresent();
     }
 }

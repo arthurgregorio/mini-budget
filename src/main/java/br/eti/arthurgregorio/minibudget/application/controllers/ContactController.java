@@ -74,7 +74,7 @@ public class ContactController {
         final var contact = this.contactRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new ResourceNotFoundException(externalId));
 
-        contact.updateValues(payload);
+        contact.prepareForUpdate(this.conversionService.convert(payload, Contact.class));
 
         final var updatedPayload = this.conversionService.convert(
                 this.contactRegistrationService.update(contact), ContactPayload.class);

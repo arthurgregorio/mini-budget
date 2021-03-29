@@ -1,6 +1,5 @@
 package br.eti.arthurgregorio.minibudget.model.entities;
 
-import br.eti.arthurgregorio.minibudget.application.payloads.ClassificationPayload;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,9 +23,9 @@ public class Classification extends PersistentEntity {
     @Column(name = "type", length = 7, nullable = false)
     private Type type;
 
-    public void updateValues(ClassificationPayload payload) {
-        this.name = payload.getName();
-        this.type = payload.getType();
+    public void prepareForUpdate(Classification classification) {
+        this.name = classification.getName();
+        this.type = classification.getType();
     }
 
     public enum Type {

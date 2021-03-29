@@ -26,4 +26,21 @@
                 VALUES('6ce09b57-1fc6-4dcf-84d0-c923c7ed1a1c', 0, current_timestamp, 'Freelancers', 'INCOME');
         </sql>
     </changeSet>
+
+    <changeSet id="populate-movements" author="arthur.gregorio" dbms="h2" context="test">
+        <sql>
+            INSERT INTO classifications(id, external_id, version, created_on, name, type)
+                VALUES(100, '6bd6f187-a67c-4a70-be47-ca6b18489bbc', 0, current_timestamp, 'Some expense', 'EXPENSE');
+
+            INSERT INTO contacts(id, external_id, version, created_on, name, email, telephone)
+                VALUES(101, '607ef966-f6c0-48b7-bbb1-ec2a36191509', 0, current_timestamp, 'Contact X', 'contact_x@email.com', null);
+
+            INSERT INTO movements(external_id, version, created_on, description, due_date, value, state, id_contact, id_classification)
+                VALUES ('49b440cd-ef00-42d1-af24-ec217498f9ca', 0, current_timestamp, 'Movement of test', '2021-07-29', 200, 'OPEN', 101, 100);
+            INSERT INTO movements(external_id, version, created_on, description, due_date, value, state, id_classification)
+                VALUES ('01a81ac4-2cb6-4efc-847c-3aa550d6586a', 0, current_timestamp, 'Movement to search', '2021-11-17', 100, 'OPEN', 100);
+            INSERT INTO movements(external_id, version, created_on, description, due_date, value, state, id_contact, id_classification)
+                VALUES ('61e19e7b-9655-4dc5-8657-0377054ac0dc', 0, current_timestamp, 'Movement to delete', '2021-06-16', 12.99, 'OPEN', 101, 100);
+        </sql>
+    </changeSet>
 </databaseChangeLog>
